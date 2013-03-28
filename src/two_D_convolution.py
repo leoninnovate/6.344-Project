@@ -10,6 +10,7 @@ def convolve(f, g):
   """
   Returns a Two_D_Signal representing the convolution of the two given
       Two_D_Signal |f| and |g|.
+  TODO(mikemeko): use row-column decomposition; maybe use FFT.
   """
   assert isinstance(f, Two_D_Signal), 'f must be a Two_D_Signal'
   assert isinstance(g, Two_D_Signal), 'g must be a Two_D_Signal'

@@ -13,9 +13,10 @@ def image_to_two_D_signal(image_path):
       |image_path|.
   """
   image = Image.open(image_path)
+  image_pixels = image.load()
   width, height = image.size
-  return Two_D_Signal({(n1, n2): image.getpixel((n1, n2)) for n1 in xrange(
-      width) for n2 in xrange(height)})
+  return Two_D_Signal({(n1, n2): image_pixels[n1, n2] for n1 in xrange(width)
+      for n2 in xrange(height)})
 
 def two_D_signal_to_image(signal, image_path):
   """
