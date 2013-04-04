@@ -4,6 +4,7 @@ Script to convolve 2D signals.
 
 __author__ = 'mikemeko@mit.edu (Michael Mekonnen)'
 
+from scipy.signal import fftconvolve
 from two_D_signal import Two_D_Signal
 
 def convolve(f, g):
@@ -57,3 +58,9 @@ def clipped_convolve(f, g):
   assert isinstance(g, Two_D_Signal), 'g must be a Two_D_Signal'
   return clipped_signal(convolve(padded_signal(f, g.n1_max - g.n1_min + 1,
       g.n2_max - g.n2_min + 1), g), f.n1_min, f.n1_max, f.n2_min, f.n2_max)
+
+def fft_convolve(f, g):
+  assert isinstance(f, Two_D_Signal), 'f must be a Two_D_Signal'
+  assert isinstance(g, Two_D_Signal), 'g must be a Two_D_Signal'
+  return Two_D_Signal.from_two_D_array(fftconvolve(f.to_two_D_array(),
+      g.to_two_D_array()))
