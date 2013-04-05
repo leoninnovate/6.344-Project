@@ -36,29 +36,26 @@ def detect_edges(image_path):
   Saves a new image that presents the non-directional edges in the image saved
       at the given |image_path|.
   """
-  print 'computing 2D signal from image path'
+  print '\tcomputing 2D signal from image path'
   signal = image_to_two_D_signal(image_path)
-  print 'computing horizontal gradient'
+  print '\tcomputing horizontal gradient'
   horizontal_gradient = compute_gradient(signal, HORIZONTAL_EDGE_FILTER)
-  print 'computing vertical gradient'
+  print '\tcomputing vertical gradient'
   vertical_gradient = compute_gradient(signal, VERTICAL_EDGE_FILTER)
-  print 'computing non-directional gradient'
+  print '\tcomputing non-directional gradient'
   non_directional_gradient = Two_D_Signal({key: sqrt(horizontal_gradient[
       key] ** 2 + vertical_gradient[key] ** 2) for key in
       horizontal_gradient.values})
-  print 'computing gradient magnitude'
+  print '\tcomputing gradient magnitude'
   abs_gradient = abs(non_directional_gradient)
-  print 'finding maximum gradient magnitude'
+  print '\tfinding maximum gradient magnitude'
   max_abs = max(abs_gradient.non_zero_values())
-  print 'scaling abs image by 255 / maximum gradient magnitude'
+  print '\tscaling abs image by 255 / maximum gradient magnitude'
   scaled = (255 / max_abs) * abs_gradient
-  print 'inverting scaled image'
+  print '\tinverting scaled image'
   inverted = invert(scaled, 255)
-  print 'saving result image'
+  print '\tsaving result image'
   new_image_path = join(strip_dir(image_path), '%s_edges.%s' % tuple(
       strip_file_name(image_path).split('.')))
   two_D_signal_to_image(inverted, new_image_path)
-  print 'done'
-
-if __name__ == '__main__':
-  detect_edges('../images/stata_center.jpg')
+  print '\tdone'
