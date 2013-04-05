@@ -1,9 +1,5 @@
 """
 Edge detection using the gradient method.
-TODO(mikemeko):
-    Figure out threshold automatically (threshold needed?)
-    Check if local maximum
-    Idea: color based on abs, darker for bigger abs; not necessarily a linear f
 """
 
 __author__ = 'mikemeko@mit.edu (Michael Mekonnen)'
@@ -27,32 +23,7 @@ def compute_gradient(signal, h):
   assert isinstance(h, Two_D_Signal), 'h must be a Two_D_Signal'
   return clipped_fft_convolve(signal, h)
 
-def compute_abs(signal):
-  """
-  Computes the absolute value of the given |signal|.
-  """
-  assert isinstance(signal, Two_D_Signal), 'signal must be a Two_D_Signal'
-  return Two_D_Signal({key: abs(value) for (key, value) in
-      signal.values.items()})
-
-def compare_with_threshold(signal, threshold):
-  """
-  Returns a new Two_D_Signal with 1s at indices where |signal| is above the
-      |threshold|, and 0s elsewhere.
-  """
-  assert isinstance(signal, Two_D_Signal), 'signal must be a Two_D_Signal'
-  return Two_D_Signal({key: int(value > threshold) for (key, value) in
-      signal.values.items()})
-
-def scale(signal, k):
-  """
-  Returns the given |signal| scaled by |k|.
-  """
-  assert isinstance(signal, Two_D_Signal), 'signal must be a Two_D_Signal'
-  return Two_D_Signal({key: k * value for (key, value) in
-      signal.values.items()})
-
-def invert(signal, MAX=255):
+def invert(signal, MAX):
   """
   Returns the given |signal| inverted.
   """
@@ -62,7 +33,8 @@ def invert(signal, MAX=255):
 
 def detect_edges(image_path):
   """
-  TODO(mikemeko)
+  Saves a new image that presents the non-directional edges in the image saved
+      at the given |image_path|.
   """
   print 'computing 2D signal from image path'
   signal = image_to_two_D_signal(image_path)
@@ -75,20 +47,18 @@ def detect_edges(image_path):
       key] ** 2 + vertical_gradient[key] ** 2) for key in
       horizontal_gradient.values})
   print 'computing gradient magnitude'
-  abs_gradient = compute_abs(non_directional_gradient)
-  #print 'comparing with threshold'
-  #vs_threshold = compare_with_threshold(abs_gradient, 50)
-  print 'finding max'
-  max_abs = max(abs_gradient.values.values())
-  print 'scaling abs image by 255 / max_abs'
-  scaled = scale(abs_gradient, 255 / max_abs)
+  abs_gradient = abs(non_directional_gradient)
+  print 'finding maximum gradient magnitude'
+  max_abs = max(abs_gradient.non_zero_values())
+  print 'scaling abs image by 255 / maximum gradient magnitude'
+  scaled = (255 / max_abs) * abs_gradient
   print 'inverting scaled image'
-  inverted = invert(scaled)
-  print 'computing new image path'
+  inverted = invert(scaled, 255)
+  print 'saving result image'
   new_image_path = join(strip_dir(image_path), '%s_edges.%s' % tuple(
       strip_file_name(image_path).split('.')))
   two_D_signal_to_image(inverted, new_image_path)
   print 'done'
 
 if __name__ == '__main__':
-  detect_edges('../images/rectangle.png')
+  detect_edges('../images/stata_center.jpg')

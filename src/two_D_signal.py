@@ -30,6 +30,11 @@ class Two_D_Signal:
         n2_max).
     """
     return (self.n1_min, self.n1_max, self.n2_min, self.n2_max)
+  def non_zero_values(self):
+    """
+    Returns all the non-zero values in this signal.
+    """
+    return filter(lambda value: value, self.values.values())
   def to_two_D_array(self, n1_shift=0, n2_shift=0):
     """
     Returns the content of this signal as a 2D array. By default, the array
@@ -52,7 +57,15 @@ class Two_D_Signal:
       for n2 in xrange(num_rows):
         values[(n1_min + n1, n2_min + n2)] = two_D_array[n2][n1]
     return Two_D_Signal(values)
+  def __abs__(self):
+    return Two_D_Signal({key: abs(value) for (key, value) in
+      self.values.items()})
   def __getitem__(self, (n1, n2)):
     return self.values[(n1, n2)] if (n1, n2) in self.values else 0
+  def __rmul__(self, k):
+    return Two_D_Signal({key: k * value for (key, value) in
+      self.values.items()})
+  def __mul__(self, k):
+    return k * self
   def __str__(self):
     return str(self.values)
