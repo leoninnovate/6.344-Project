@@ -1,5 +1,9 @@
 """
 Edge detection using the gradient method.
+TODO(mikemeko):
+    Figure out threshold automatically (threshold needed?)
+    Check if local maximum
+    Idea: color based on abs, darker for bigger abs; not necessarily a linear f
 """
 
 __author__ = 'mikemeko@mit.edu (Michael Mekonnen)'
@@ -10,7 +14,7 @@ from image_two_D_signal_conversion import image_to_two_D_signal
 from image_two_D_signal_conversion import two_D_signal_to_image
 from math import sqrt
 from os.path import join
-from two_D_convolution import fft_convolve
+from two_D_convolution import clipped_fft_convolve
 from two_D_signal import Two_D_Signal
 from util import strip_dir
 from util import strip_file_name
@@ -21,7 +25,7 @@ def compute_gradient(signal, h):
   """
   assert isinstance(signal, Two_D_Signal), 'signal must be a Two_D_Signal'
   assert isinstance(h, Two_D_Signal), 'h must be a Two_D_Signal'
-  return fft_convolve(signal, h)
+  return clipped_fft_convolve(signal, h)
 
 def compute_abs(signal):
   """
@@ -72,17 +76,19 @@ def detect_edges(image_path):
       horizontal_gradient.values})
   print 'computing gradient magnitude'
   abs_gradient = compute_abs(non_directional_gradient)
-  print 'comparing with threshold'
-  vs_threshold = compare_with_threshold(abs_gradient, 50)
-  print 'scaling threshold image'
-  scaled = scale(vs_threshold, 255)
+  #print 'comparing with threshold'
+  #vs_threshold = compare_with_threshold(abs_gradient, 50)
+  print 'finding max'
+  max_abs = max(abs_gradient.values.values())
+  print 'scaling abs image by 255 / max_abs'
+  scaled = scale(abs_gradient, 255 / max_abs)
   print 'inverting scaled image'
   inverted = invert(scaled)
   print 'computing new image path'
-  new_image_path = join(strip_dir(image_path), 'edges_%s' % strip_file_name(
-      image_path))
+  new_image_path = join(strip_dir(image_path), '%s_edges.%s' % tuple(
+      strip_file_name(image_path).split('.')))
   two_D_signal_to_image(inverted, new_image_path)
   print 'done'
 
 if __name__ == '__main__':
-  detect_edges('../images/lena.png')
+  detect_edges('../images/stata_center.jpg')

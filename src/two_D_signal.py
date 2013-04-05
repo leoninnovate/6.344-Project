@@ -26,23 +26,29 @@ class Two_D_Signal:
     Returns the value corresponding to the tuple (n1, n2).
     """
     return self.values[(n1, n2)] if (n1, n2) in self.values else 0
-  def to_two_D_array(self):
+  def bounds(self):
     """
     TODO(mikemeko)
     """
-    return array([[self.value(n1, n2) for n2 in xrange(self.n2_min,
-        self.n2_max + 1)] for n1 in xrange(self.n1_min, self.n1_max + 1)])
+    return (self.n1_min, self.n1_max, self.n2_min, self.n2_max)
+  def to_two_D_array(self, n1_shift=0, n2_shift=0):
+    """
+    TODO(mikemeko)
+    """
+    return array([[self.value(n1, n2) for n1 in xrange(self.n1_min - n1_shift,
+        self.n1_max + 1)] for n2 in xrange(self.n2_min - n2_shift,
+        self.n2_max + 1)])
   @staticmethod
-  def from_two_D_array(two_D_array):
+  def from_two_D_array(two_D_array, n1_min=0, n2_min=0):
     """
     TODO(mikemeko)
     """
     # TODO(mikemeko): row/col vs. n1/n2
     values = {}
     num_rows, num_cols = two_D_array.shape
-    for n1 in xrange(num_rows):
-      for n2 in xrange(num_cols):
-        values[(n1, n2)] = two_D_array[n1][n2]
+    for n2 in xrange(num_rows):
+      for n1 in xrange(num_cols):
+        values[(n1_min + n1, n2_min + n2)] = two_D_array[n2][n1]
     return Two_D_Signal(values)
   def __str__(self):
     return str(self.values)
