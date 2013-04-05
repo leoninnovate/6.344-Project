@@ -71,8 +71,8 @@ def detect_edges(image_path):
   print 'computing vertical gradient'
   vertical_gradient = compute_gradient(signal, VERTICAL_EDGE_FILTER)
   print 'computing non-directional gradient'
-  non_directional_gradient = Two_D_Signal({key: sqrt(horizontal_gradient.value(
-      *key) ** 2 + vertical_gradient.value(*key) ** 2) for key in
+  non_directional_gradient = Two_D_Signal({key: sqrt(horizontal_gradient[
+      key] ** 2 + vertical_gradient[key] ** 2) for key in
       horizontal_gradient.values})
   print 'computing gradient magnitude'
   abs_gradient = compute_abs(non_directional_gradient)

@@ -16,22 +16,22 @@ def padded_signal(signal, n1_pad, n2_pad):
   new_values = signal.values.copy()
   for n1 in xrange(signal.n1_min, signal.n1_max + 1):
     for n2_p in xrange(1, n2_pad + 1):
-      new_values[(n1, signal.n2_min - n2_p)] = signal.value(n1, signal.n2_min)
-      new_values[(n1, signal.n2_max + n2_p)] = signal.value(n1, signal.n2_max)
+      new_values[(n1, signal.n2_min - n2_p)] = signal[n1, signal.n2_min]
+      new_values[(n1, signal.n2_max + n2_p)] = signal[n1, signal.n2_max]
   for n2 in xrange(signal.n2_min, signal.n2_max + 1):
     for n1_p in xrange(1, n1_pad + 1):
-      new_values[(signal.n1_min - n1_p, n2)] = signal.value(signal.n1_min, n2)
-      new_values[(signal.n1_max + n1_p, n2)] = signal.value(signal.n1_max, n2)
+      new_values[(signal.n1_min - n1_p, n2)] = signal[signal.n1_min, n2]
+      new_values[(signal.n1_max + n1_p, n2)] = signal[signal.n1_max, n2]
   for n1_p in xrange(1, n1_pad + 1):
     for n2_p in xrange(1, n2_pad + 1):
-      new_values[(signal.n1_min - n1_p, signal.n2_min - n2_p)] = signal.value(
-          signal.n1_min, signal.n2_min)
-      new_values[(signal.n1_min - n1_p, signal.n2_max + n2_p)] = signal.value(
-          signal.n1_min, signal.n2_max)
-      new_values[(signal.n1_max + n1_p, signal.n2_min - n2_p)] = signal.value(
-          signal.n1_max, signal.n2_min)
-      new_values[(signal.n1_max + n1_p, signal.n2_max + n2_p)] = signal.value(
-          signal.n1_max, signal.n2_max)
+      new_values[(signal.n1_min - n1_p, signal.n2_min - n2_p)] = signal[
+          signal.n1_min, signal.n2_min]
+      new_values[(signal.n1_min - n1_p, signal.n2_max + n2_p)] = signal[
+          signal.n1_min, signal.n2_max]
+      new_values[(signal.n1_max + n1_p, signal.n2_min - n2_p)] = signal[
+          signal.n1_max, signal.n2_min]
+      new_values[(signal.n1_max + n1_p, signal.n2_max + n2_p)] = signal[
+          signal.n1_max, signal.n2_max]
   return Two_D_Signal(new_values)
 
 def clipped_signal(signal, new_n1_min, new_n1_max, new_n2_min, new_n2_max):
