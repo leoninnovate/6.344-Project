@@ -19,11 +19,14 @@ class Two_D_Signal:
     self.values = values
     self.n1_min = min(key[0] for key in values.keys())
     self.n1_max = max(key[0] for key in values.keys())
+    self.width = self.n1_max - self.n1_min + 1
     self.n2_min = min(key[1] for key in values.keys())
     self.n2_max = max(key[1] for key in values.keys())
+    self.height = self.n2_max - self.n2_min + 1
   def value(self, n1, n2):
     """
     Returns the value corresponding to the tuple (n1, n2).
+    TODO(mikemeko): remove, use __getitem__
     """
     return self.values[(n1, n2)] if (n1, n2) in self.values else 0
   def bounds(self):
@@ -50,5 +53,7 @@ class Two_D_Signal:
       for n1 in xrange(num_cols):
         values[(n1_min + n1, n2_min + n2)] = two_D_array[n2][n1]
     return Two_D_Signal(values)
+  def __getitem__(self, (n1, n2)):
+    return self.values[(n1, n2)] if (n1, n2) in self.values else 0
   def __str__(self):
     return str(self.values)

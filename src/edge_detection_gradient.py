@@ -91,4 +91,4 @@ def detect_edges(image_path):
   print 'done'
 
 if __name__ == '__main__':
-  detect_edges('../images/stata_center.jpg')
+  detect_edges('../images/rectangle.png')
