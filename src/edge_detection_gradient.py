@@ -55,7 +55,7 @@ def detect_edges(image_path):
   print '\tinverting scaled image'
   inverted = invert(scaled, 255)
   print '\tsaving result image'
-  new_image_path = join(strip_dir(image_path), '%s_edges.%s' % tuple(
+  new_image_path = join(strip_dir(image_path), '%s_gradient_edges.%s' % tuple(
       strip_file_name(image_path).split('.')))
   two_D_signal_to_image(inverted, new_image_path)
   print '\tdone'
