@@ -17,7 +17,8 @@ from util import strip_file_name
 
 def compute_gradient(signal, h):
   """
-  Computes the gradient of the given |signal| using the given filter |h|.
+  Computes (approximately) the gradient of the given |signal| using the given
+      filter |h|.
   """
   assert isinstance(signal, Two_D_Signal), 'signal must be a Two_D_Signal'
   assert isinstance(h, Two_D_Signal), 'h must be a Two_D_Signal'
@@ -31,10 +32,11 @@ def invert(signal, MAX):
   return Two_D_Signal({key: MAX - value for (key, value) in
       signal.values.items()})
 
-def detect_edges(image_path):
+def detect_edges_gradient(image_path):
   """
   Saves a new image that presents the non-directional edges in the image saved
-      at the given |image_path|.
+      at the given |image_path|. This method uses the Gradient based method for
+      edge detection.
   """
   print '\tcomputing 2D signal from image path'
   signal = image_to_two_D_signal(image_path)
