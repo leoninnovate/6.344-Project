@@ -24,6 +24,13 @@ class Two_D_Signal:
     self.n2_min = min(key[1] for key in values.keys())
     self.n2_max = max(key[1] for key in values.keys())
     self.height = self.n2_max - self.n2_min + 1
+  def set_value(self, n1, n2, val):
+    """
+    Sets the value for the point (|n1|, |n2|) to be |val|.
+    """
+    assert self.n1_min <= n1 <= self.n1_max, 'n1=%d out of range' % n1
+    assert self.n2_min <= n2 <= self.n2_max, 'n2=%d out of range' % n2
+    self.values[(n1, n2)] = val
   def bounds(self):
     """
     Returns the bounds of this signal in the form (n1_min, n1_max, n2_min,
