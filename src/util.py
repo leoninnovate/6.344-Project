@@ -59,6 +59,16 @@ def invert(signal, MAX):
   return Two_D_Signal({key: MAX - value for (key, value) in
       signal.values.items()})
 
+def scaler(max_x, max_y, alpha):
+  """
+  Returns a function that given a number x returns
+      |max_y| * (x / |max_x|) ** |alpha|.
+  When |alpha| is one, the return function is just a line through (0, 0) and
+      (|max_x|, |max_y|). |alpha| can be thought of as a parameter to control
+      the curveture of the curve through those two points.
+  """
+  return lambda x: max_y * (float(x) / max_x) ** alpha
+
 def strip_file_name(path):
   """
   Returns the file name of the given |path|, or '' on failure.
