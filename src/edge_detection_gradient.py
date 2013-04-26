@@ -35,14 +35,12 @@ def detect_edges_gradient(image_path, alpha):
   non_directional_gradient = Two_D_Signal({key: sqrt(horizontal_gradient[
       key] ** 2 + vertical_gradient[key] ** 2) for key in
       horizontal_gradient.values})
-  print '\tcomputing gradient magnitude'
-  abs_gradient = abs(non_directional_gradient)
   print '\tfinding maximum gradient magnitude'
-  max_abs = max(abs_gradient.non_zero_values())
-  print '\tscaling abs image with alpha=%s' % alpha
+  max_abs = max(non_directional_gradient.non_zero_values())
+  print '\tscaling gradient image with alpha=%s' % alpha
   scale_f = scaler(max_abs, 255, alpha)
-  scaled = Two_D_Signal({key: scale_f(abs_gradient[key]) for key in
-      abs_gradient.values})
+  scaled = Two_D_Signal({key: scale_f(non_directional_gradient[key]) for key in
+      non_directional_gradient.values})
   print '\tinverting scaled image'
   inverted = invert(scaled, 255)
   print '\tsaving result image'

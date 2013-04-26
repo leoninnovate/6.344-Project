@@ -30,11 +30,11 @@ def detect_edges_laplacian(image_path, alpha, variance_filter=True):
   """
   print '\tcomputing 2D signal from image path'
   signal = image_to_two_D_signal(image_path)
-  print '\tblurring image'
-  blurred = Two_D_Signal.from_two_D_array(gaussian_filter(
-      signal.to_two_D_array(), 0.5))
+#  print '\tblurring image'
+#  blurred = Two_D_Signal.from_two_D_array(gaussian_filter(
+#      signal.to_two_D_array(), 0.5))
   print '\tcomputing laplacian'
-  laplacian = clipped_fft_convolve(blurred, LAPLACIAN_FILTER)
+  laplacian = clipped_fft_convolve(signal, LAPLACIAN_FILTER)
   print '\tcomputing abs'
   abs_laplacian = abs(laplacian)
   print '\tfinding cutoff abs: 95th percentile abs'
@@ -47,9 +47,9 @@ def detect_edges_laplacian(image_path, alpha, variance_filter=True):
   inverted = invert(scaled, 255)
   if variance_filter:
     print '\tcomputing variance'
-    var = var_signal(blurred, 2)
+    var = var_signal(signal, 2)
     print '\tfinding cutoff variance'
-    cutoff_var = scoreatpercentile(var.non_zero_values(), 65)
+    cutoff_var = scoreatpercentile(var.non_zero_values(), 70)
     print '\tupdating result image with cutoff variance'
     for n1 in xrange(inverted.n1_min, inverted.n1_max + 1):
       for n2 in xrange(inverted.n2_min, inverted.n2_max + 1):
