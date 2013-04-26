@@ -1,3 +1,7 @@
 # Files to ignore from version control.
+*.aux
+*.log
+*.out
 *.pyc
+*.synctex.gz
 
