@@ -42,7 +42,7 @@ For my 6.344 final project, I took up the task of edge detection: given an image
 
 \section{Gradient-based method}
 
-The gradient-based method detects edges in a $2D$ image by finding the analogue of a gradient for the image and then finding the peaks of the magnitude of the gradient. It helps to think about this in $1D$. To find the ``edges" of a $1D$ continuous signal $f(x)$, we would first take the derivative $\frac{df}{dx}$ and look for it's optima since an edge in $1D$ is a fast change in $f(x)$ for a small change in $x$, which is we can very clearly detect by taking the derivative. For a $2D$ continuous signal $f(x,y)$, we can do a very similar thing. Here, we would find the magnitude of the gradient given by $|\nabla f(x,y)| = \sqrt{(\frac{\partial f}{\partial x})^2 + (\frac{\partial f}{\partial y})^2}$ and search for its optima. When we are working a digital image, we are not able to take derivatives, so we approximate the derivatives. There are various ways to approximate the derivatives $\frac{\partial f}{\partial x}$ and $\frac{\partial f}{\partial y}$, but one intuitive and standard method is to use filters like the ones shown in Figure TODO.
+The gradient-based method detects edges in a $2D$ image by finding the analogue of a gradient for the image and then finding the peaks of the magnitude of the gradient. It helps to think about this in $1D$. To find the ``edges" of a $1D$ continuous signal $f(x)$, we would first take the derivative $\frac{df}{dx}$ and look for it's optima since an edge in $1D$ is a fast change in $f(x)$ for a small change in $x$, which is we can very clearly detect by taking the derivative. For a $2D$ continuous signal $f(x,y)$, we can do a very similar thing. Here, we would find the magnitude of the gradient given by $|\nabla f| = \sqrt{(\frac{\partial f}{\partial x})^2 + (\frac{\partial f}{\partial y})^2}$ and search for its optima. When we are working with a digital image, we are not able to take derivatives, so we approximate the derivatives. There are various ways to approximate the derivatives $\frac{\partial f}{\partial x}$ and $\frac{\partial f}{\partial y}$, but one intuitive and standard method is to use filters like the ones shown in Figure TODO.
 
 In Figure TODO, I present my overall gradient-based edge detection system. Given an image $f(n_1, n_2)$, we first finds its derivatives in the $n_1$ and $n_2$ directions exactly by using the filters shown in Figure TODO. Next, we compute an approximation of the magnitude of the gradient by taking the square root of the sum of the squares of the two different derivatives. The standard gradient-based edge detection method then proceeds to finding the pixels whose gradient magnitude exceeds some threshold, and these pixels are classified as edge pixels. This steps is usually followed by an edge-thinning step. The choice of this threshold depends on the particular image at hand. In my project, I chose to do something different from using an experimentally found threshold. I first find the maximum gradient magnitude, $M$. Then, for a given pixel $(n_1, n_2)$, I set its brightness level in the output image to be:
 \begin{equation*}
@@ -89,19 +89,32 @@ What this does is assign pixels whose gradient magnitude is close to $M$ a low b
 
 \section{Laplacian-based method}
 
+The laplacian-based method detects edges in a $2D$ image by finding the analogue of the laplacian for the image and then finding the zero-crossings of the laplacian. Once again, let us think in $1D$ to get an intuition for why this is a sensible thing to do. To find the edges of a $1D$ continuous function $f(x)$, we would first find the second derivative $\frac{d^2f}{dx^2}$ and then look at its zeros, which correspond to the inflection points of $f(x)$. Here we are defining edges of $f(x)$ to be its inflection points, which is a reasonable definition. For a 2D continuous signal $f(x,y)$, we can do a very similar thing. We would find the laplacian defined as $\nabla^2f = \frac{\partial^2f}{\partial x} +  \frac{\partial^2f}{\partial y}$ and search for the zero-crossings. When we are working with a digital image, we are not able to take the laplacian, so we approximate it. Figure TODO presents one filter that can be used to approximate the laplacian.
+
+In Figure  TODO, I present my overall laplacian-based edge detection method. Given an image $f(n_1, n_2)$, we first find the laplacian by using the filter presented in Figure TODO. The standard lapalcian-base method would then proceed to finding the ``zero-crossings." However, I found great difficulty in doing this and defining what a zero-crossing really means for a digital image. However I found an alternative approach. After computing the laplacian, I take the absolute value to get the magnitude of the laplacian. I then rescale these values in a completely analogous manner as the way described in the gradient-based method, but here $M$ is defined to be the $95^{th}$ percentile laplacian magnitude instead of the maximum. I reached this design decision empirically based on experimentation. At this point, we do have an edge map, but this edge map looks very noisy. To get rid of most of the false positives, we compute and use an estimate of local variance at each pixel. If the variance is too low at a pixel, then it is not an edge point. Here, we do need a threshold value to determine a variance that is ``too low." I set this threshold to be the $70^{th}$ percentile variance. Once again, I reached this value by experimentation.
+
 \begin{figure}
 \centering
 \begin{tabular}{c || c | c | c }
-1 & -1 & 2 & -1 \\
+1 & 1 & 1 & 1 \\
 \hline
-0 & 2 & -4 & 2 \\
+0 & 1 & -8 & 1 \\
 \hline
--1 & -1 & 2 & -1 \\
+-1 & 1 & 1 & 1 \\
 \hline\hline
 & -1 & 0 & 1 \\
 \end{tabular}
 \caption{TODO}
 \label{fig:TODO}
 \end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{LaplacianMethod.png}
+\caption{TODO}
+\label{fig:TODO}
+\end{figure}
+
+\section{Implementation}
 
 \end{document}

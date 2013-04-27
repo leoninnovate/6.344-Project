@@ -8,7 +8,6 @@ from constants import LAPLACIAN_FILTER
 from image_two_D_signal_conversion import image_to_two_D_signal
 from image_two_D_signal_conversion import two_D_signal_to_image
 from os.path import join
-from scipy.ndimage.filters import gaussian_filter
 from scipy.stats import scoreatpercentile
 from two_D_signal import Two_D_Signal
 from two_D_signal_stats import var_signal
@@ -30,9 +29,6 @@ def detect_edges_laplacian(image_path, alpha, variance_filter=True):
   """
   print '\tcomputing 2D signal from image path'
   signal = image_to_two_D_signal(image_path)
-#  print '\tblurring image'
-#  blurred = Two_D_Signal.from_two_D_array(gaussian_filter(
-#      signal.to_two_D_array(), 0.5))
   print '\tcomputing laplacian'
   laplacian = clipped_fft_convolve(signal, LAPLACIAN_FILTER)
   print '\tcomputing abs'
