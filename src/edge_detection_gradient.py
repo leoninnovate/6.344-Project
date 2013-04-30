@@ -10,6 +10,7 @@ from image_two_D_signal_conversion import image_to_two_D_signal
 from image_two_D_signal_conversion import two_D_signal_to_image
 from math import sqrt
 from os.path import join
+from scipy.stats import scoreatpercentile
 from two_D_convolution import clipped_fft_convolve
 from two_D_signal import Two_D_Signal
 from util import invert
@@ -35,10 +36,10 @@ def detect_edges_gradient(image_path, alpha):
   non_directional_gradient = Two_D_Signal({key: sqrt(horizontal_gradient[
       key] ** 2 + vertical_gradient[key] ** 2) for key in
       horizontal_gradient.values})
-  print '\tfinding maximum gradient magnitude'
-  max_abs = max(non_directional_gradient.non_zero_values())
+  print '\tfinding 95th percentile gradient magnitude'
+  cutoff_abs = scoreatpercentile(non_directional_gradient.non_zero_values(), 95)
   print '\tscaling gradient image with alpha=%s' % alpha
-  scale_f = scaler(max_abs, 255, alpha)
+  scale_f = scaler(cutoff_abs, 255, alpha)
   scaled = Two_D_Signal({key: scale_f(non_directional_gradient[key]) for key in
       non_directional_gradient.values})
   print '\tinverting scaled image'
