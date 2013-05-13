@@ -6,6 +6,7 @@ __author__ = 'mikemeko@mit.edu (Michael Mekonnen)'
 
 from edge_detection_gradient import detect_edges_gradient
 from edge_detection_laplacian import detect_edges_laplacian
+from image_enhancement import enhance_image
 from sys import argv
 
 def show_help():
@@ -34,7 +35,8 @@ if __name__ == '__main__':
       for image_file in argv[(4 if alpha_given else 2):]:
         print 'Processing %s' % image_file
         try:
-          detect_edges(image_file, alpha)
+          edge_map_file = detect_edges(image_file, alpha)
+          enhance_image(image_file, edge_map_file)
           print 'Success'
         except Exception as e:
           print 'Failure: %s' % e

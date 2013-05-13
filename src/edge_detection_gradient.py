@@ -49,3 +49,4 @@ def detect_edges_gradient(image_path, alpha):
       strip_file_name(image_path).split('.')))
   two_D_signal_to_image(inverted, new_image_path)
   print '\tdone'
+  return new_image_path

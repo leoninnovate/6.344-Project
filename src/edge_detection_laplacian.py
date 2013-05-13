@@ -19,7 +19,7 @@ from util import strip_file_name
 
 def detect_edges_laplacian(image_path, alpha, variance_filter=True):
   """
-  Saves a new image that presentsthe edges in the image saved at the given
+  Saves a new image that presents the edges in the image saved at the given
       |image_path|. This method uses the Laplacian based method for edge
       detection. |alpha|, a number greater than 0, is a parameter to
       determine which pixels to consider edges. The higher the value of |alpha|
@@ -56,3 +56,4 @@ def detect_edges_laplacian(image_path, alpha, variance_filter=True):
       strip_file_name(image_path).split('.')))
   two_D_signal_to_image(inverted, new_image_path)
   print '\tdone'
+  return new_image_path
