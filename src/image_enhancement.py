@@ -15,7 +15,7 @@ def compose(image_pel, edge_map_val):
       |edge_map_val| such that the edges in the image are more pronounced.
   """
   def _compose(image_val):
-    return image_val + edge_map_val - 255
+    return image_val + (edge_map_val - 255) / 2
   if isinstance(image_pel, tuple):
     return tuple(map(_compose, image_pel))
   else:
